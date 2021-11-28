@@ -2,16 +2,49 @@
 
 ```php
 
-$data = [
+$book = [
     'id' => 1,
-    'title' => 'TEst title'
+    'title' => 'Test title'
+    'chapters' => [
+        [
+            'chapter1' => 'Intro',
+        ],[
+            'chapter2' => 'Final'
+        ]
+    ]
 ];
 
-class Book implements \Jaddek\Hydrator\ItemInterface
+$chapter = []
+
+class Chapter extends \Jaddek\Hydrator\Item 
+{
+     public function __construct(
+        private string $chapter1,
+        private string $chapter2,
+    )
+    {
+    }
+}
+
+class ChapterCollection extends \Jaddek\Hydrator\Collection
+{
+        public static function getSupportedItem(): string
+    {
+        return \Jaddek\Hydrator\Tests\Stub\Chapter::class;
+    }
+
+    public static function getItemsKey(): string
+    {
+        return 'chapters';
+    }
+}
+
+class Book extends \Jaddek\Hydrator\Item
 {
     public function __construct(
         private int $id,
-        private string $title
+        private string $title,
+        private ChaptersCollection $chapters
     )
     {
     }
